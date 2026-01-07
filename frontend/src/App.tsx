@@ -1,6 +1,4 @@
-import React from 'react';
 import DashboardLayout from './components/DashboardLayout';
-import { Typography } from '@mui/material';
 import { Route, Routes } from 'react-router';
 import Upload from './pages/Upload';
 import Analytics from './pages/Analytics';

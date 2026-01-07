@@ -7,8 +7,6 @@ import { Link } from 'react-router';
 
 const drawerWidth = 240;
 
-const selectedIndex = 0;
-
 interface SidebarProps {
     mobileOpen: boolean;
     handleDrawerToggle: () => void;
@@ -33,7 +31,7 @@ export default function Sidebar({ mobileOpen, handleDrawerToggle, handleDrawerCh
     <div>
       <List>
         {drawerItems.map(item => (
-          <Link to={item.link}>
+          <Link to={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItem key={item.text} disablePadding onClick={() => handleDrawerChange(item.index)} >
               <ListItemButton>
                 <ListItemIcon>

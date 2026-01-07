@@ -20,7 +20,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Header handleDrawerToggle={handleDrawerToggle} />
-      <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+      <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} handleDrawerChange={
+        () => {
+            
+        }
+      } />
       
       <Box
         component="main"
