@@ -22,13 +22,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ensure directories exist on startup or before save
 os.makedirs("uploads", exist_ok=True)
 
 json_file = "files.json"
 
 @app.post("/upload")
-def upload_file(upload_file: UploadFile = File(...)):
+async def upload_file(upload_file: UploadFile = File(...)):
+    contents = await upload_file.read()
+    
+    text = contents.decode("utf-8")
+    
+    print(text)
+
     file_location = f"uploads/{upload_file.filename}"
     with open(file_location, "wb") as f:
         f.write(upload_file.file.read())
@@ -58,6 +63,6 @@ def get_files():
     return {"files": files}
 
 
-# @app.get("/items/{item_id}")
-# def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id, "q": q}
+@app.get("/files/{file_id}")
+def read_item(file_id: int, q: Union[str, None] = None):
+    return {"file_id": file_id, "q": q}
