@@ -1,11 +1,15 @@
 import os
 import json
+import logging
 
 from typing import Union
 
+from backend.services.ai_analyzer import load_and_run_model
 from fastapi import FastAPI, UploadFile, File
 
 from fastapi.middleware.cors import CORSMiddleware
+
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = FastAPI()
 
@@ -26,15 +30,7 @@ os.makedirs("uploads", exist_ok=True)
 
 json_file = "files.json"
 
-@app.post("/upload")
-async def upload_file(upload_file: UploadFile = File(...)):
-    contents = await upload_file.read()
-    
-    text = contents.decode("utf-8")
-    
-    print(text)
-
-    file_location = f"uploads/{upload_file.filename}"
+def save_file(file_location: str, upload_file: UploadFile = File(...)):
     with open(file_location, "wb") as f:
         f.write(upload_file.file.read())
     
@@ -53,7 +49,20 @@ async def upload_file(upload_file: UploadFile = File(...)):
         file.seek(0)
         json.dump(data, file, indent=4)
         file.truncate()
-        
+
+@app.post("/upload")
+async def upload_file(upload_file: UploadFile = File(...)):
+    file_location = f"uploads/{upload_file.filename}"
+    save_file(file_location, upload_file)
+
+    with open(file_location, 'r') as f:
+        content = f.read()
+        print(content)
+
+        result = load_and_run_model(content)
+
+        print(result)
+
     return {"status": "file uploaded", "filename": upload_file.filename}
 
 @app.get("/files")
